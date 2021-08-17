@@ -21,8 +21,8 @@ csi2 = get_scaled_csi(csi_entry2);
 
 
 
-A = abs(csi);
-B = db(A);
+A = abs(csi); #절대값
+B = db(A);%데시벨 단위로 변환
 
 
 Phase = angle(csi);
@@ -30,7 +30,7 @@ ABC1 = Phase(1,1,:);
 ABC2 = Phase(1,2,:);
 ABC3 = Phase(1,3,:);
 
-PABC1 = sanitize_phase(ABC1);
+PABC1 = sanitize_phase(ABC1); #위상회전 보정(지구가 도니까 음파같은것은 보정해줘야함) - 보정시 각도로 
 PABC2 = sanitize_phase(ABC2);
 PABC3 = sanitize_phase(ABC3);
 
