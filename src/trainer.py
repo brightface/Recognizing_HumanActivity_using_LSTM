@@ -93,14 +93,15 @@ cvscores = []
 confusion_sum = [[0 for i in range(3)] for j in range(3)] ######## 3 is number of classes
 
 #data import
-x_walk, x_laydown, x_sit, y_walk, y_laydown, y_sit = csv_import()
+x_walking, x_empty, x_sitdown, y_walking, y_empty, y_sitdown = csv_import()
+#dictionary return
 
-print("walk = ", len(x_walk)," laydown =", len(x_laydown)," sit =", len(x_sit))
+print("walk = ", len(x_walking)," empty =", len(x_empty)," sit =", len(x_sitdown))
 
 #data shuffle
-x_walk, y_walk = shuffle(x_walk, y_walk, random_state=0)
-x_laydown, y_laydown = shuffle(x_laydown, y_laydown, random_state=0)
-x_sit, y_sit = shuffle(x_sit, y_sit, random_state=0)
+x_walking, y_walking = shuffle(x_walking, y_walking, random_state=0)
+x_empty, y_empty = shuffle(x_empty, y_empty, random_state=0)
+x_sitdown, y_sitdown = shuffle(x_sitdown, y_sitdown, random_state=0)
 
 #k_fold, cross validation
 kk = 5
@@ -119,27 +120,27 @@ with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
         #Roll the data
         x_walking = np.roll(x_walking, int(len(x_walking) // kk), axis=0)
         y_walking = np.roll(y_walking, int(len(y_walking) // kk), axis=0)
-        x_laydown = np.roll(x_laydown, int(len(x_laydown) // kk), axis=0)
-        y_laydown = np.roll(y_laydown, int(len(y_laydown) // kk), axis=0)
         x_empty = np.roll(x_empty, int(len(x_empty) // kk), axis=0)
         y_empty = np.roll(y_empty, int(len(y_empty) // kk), axis=0)
-        
+        x_sitdown = np.roll(x_sitdown, int(len(x_sitdown) // kk), axis=0)
+        y_sitdown = np.roll(y_sitdown, int(len(y_sitdown) // kk), axis=0)
+
         wifi_x_train = np.r_[x_walking[int(len(x_walking) / kk):], \
-                             x_laydown[int(len(x_laydown) / kk):], \
-                             x_empty[int(len(x_empty) // kk):]]
+                             x_empty[int(len(x_empty) / kk):], \
+                             x_sitdown[int(len(x_sitdown) // kk):]]
         wifi_y_train = np.r_[y_walking[int(len(y_walking) / kk):], \
-                             y_laydown[int(len(y_laydown) / kk):],\
-                             y_empty[int(len(y_empty) // kk):]]
+                             y_empty[int(len(y_empty) / kk):],\
+                             y_sitdown[int(len(y_sitdown) // kk):]]
 
         wifi_y_train = wifi_y_train[:,1:]
 
         wifi_x_validation = np.r_[x_walking[:int(len(x_walking) / kk)], \
-                                  x_laydown[:int(len(x_laydown) / kk)], \
-                                  x_empty[:int(len(x_empty) // kk)]]
+                                  x_empty[:int(len(x_empty) / kk)], \
+                                  x_sitdown[:int(len(x_sitdown) // kk)]]
 
         wifi_y_validation = np.r_[y_walking[:int(len(y_walking) / kk)], \
-                                  y_laydown[:int(len(y_laydown) / kk)],\
-                                  y_empty[:int(len(y_empty) // kk)]]
+                                  y_empty[:int(len(y_empty) / kk)],\
+                                  y_sitdown[:int(len(y_sitdown) // kk)]]
 
         wifi_y_validation = wifi_y_validation[:,1:]
 
@@ -147,11 +148,13 @@ with tf.Session(config=tf.ConfigProto(log_device_placement=True)) as sess:
         #data set
         #print(wifi_x_train.shape(0), wifi_y_train.shape(0))
         wifi_train = DataSet(wifi_x_train, wifi_y_train)
+
         wifi_validation = DataSet(wifi_x_validation, wifi_y_validation)
+
         print(wifi_x_train.shape, wifi_y_train.shape, wifi_x_validation.shape, wifi_y_validation.shape)
         saver = tf.train.Saver()
         sess.run(tf.initialize_all_variables())
-        ckpt = tf.train.get_checkpoint_state('model')
+        ckpt = tf.train.get_checkpoint_state('model') #model save file
         if ckpt and ckpt.model_checkpoint_path:
             saver.restore(sess, 'model/model.ckpt')
 

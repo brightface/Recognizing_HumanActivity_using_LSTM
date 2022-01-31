@@ -50,17 +50,20 @@ def csv_import():
     y_dic = {}
     print("csv file importing...")
 
-    for i in ["walk","laydown","sit"]: #modified
+    for i in ["walk","empty","sitdown"]: #modified
 
         SKIPROW = 2 #Skip every 2 rows -> overlap 800ms to 600ms  (To avoid memory error)
         num_lines = sum(1 for l in open("./input_files/xx_1000_60_" + str(i) + ".csv"))
-        skip_idx = [x for x in range(1, num_lines) if x % SKIPROW !=0]
+        #한줄씩 읽는다. open은
+        #몇줄인가? 750줄
+
+        skip_idx = [x for x in range(1, num_lines) if x % SKIPROW !=0] #홀수있때는 스킵.
 
         xx = np.array(pd.read_csv("./input_files/xx_1000_60_" + str(i) + ".csv", header=None, skiprows = skip_idx))
         yy = np.array(pd.read_csv("./input_files/yy_1000_60_" + str(i) + ".csv", header=None, skiprows = skip_idx))
 
-
-        xx = xx.reshape(len(xx),1000,90)
+        #750,
+        xx = xx.reshape(len(xx), 1000, 90)
 
         # 1000 Hz to 500 Hz (To avoid memory error)
         xx = xx[:,::2,:90]
@@ -69,7 +72,7 @@ def csv_import():
         y_dic[str(i)] = yy
 
         print(str(i), "finished...", "xx=", xx.shape, "yy=",  yy.shape)
-
-    return x_dic["walk"], x_dic["laydown"], x_dic["sit"], \
-        y_dic["walk"], y_dic["laydown"], y_dic["sit"]
-        
+    print("k")
+    #modified walking ->walk
+    return x_dic["walk"], x_dic["empty"], x_dic["sitdown"], \
+        y_dic["walk"], y_dic["empty"], y_dic["sitdown"]
