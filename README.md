@@ -19,8 +19,11 @@ https://github.com/kookmin-sw/2019-cap1-2019_22
 </p>
 
 ### 3. 팀 소개
-
-팀명: M.Fi(Motion Fi)
+﻿<div align="center">
+<p><img src="/doc/images/introduce"></p>
+</div>
+<br/>
+팀명: S.WITH
 <br/>
 <br/>
 팀장: 안재관<br/>
