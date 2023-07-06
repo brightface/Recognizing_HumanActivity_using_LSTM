@@ -23,7 +23,7 @@ https://github.com/kookmin-sw/2019-cap1-2019_22
 <p><img src="/doc/images/introduce"></p>
 </div>
 <br/>
-팀명: S.WITH
+팀명: MDW
 <br/>
 <br/>
 팀장: 안재관<br/>
